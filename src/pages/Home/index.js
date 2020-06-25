@@ -6,7 +6,8 @@ class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: []
+      data: null,
+      generateChart: false
     };
   }
 
@@ -43,7 +44,7 @@ class Home extends React.Component {
             ],
           };
 
-          this.setState({ ...this.state, data });
+          this.setState({ ...this.state, data, generateChart: true });
 
           console.log('state', this.state)
         } catch (error) {
@@ -74,7 +75,7 @@ class Home extends React.Component {
             ],
           };
 
-          this.setState({ ...this.state, data })
+          this.setState({ ...this.state, data, generateChart: true })
 
           console.log('state', this.state);
         } catch (error) {
@@ -92,9 +93,19 @@ class Home extends React.Component {
             "https://covid19-brazil-api.now.sh/api/report/v1/brazil/uf/mg"
           );
 
-          const data = results;
+          const data = {
+            labels: ['Minas Gerais'],
+            datasets: [
+              {
+                label: 'Mortes', data: [results.deaths], fill: true, backgroundColor: "#e63946"
+              },
+              { label: 'Casos', data: [results.cases], fill: true, backgroundColor: "#a8dadc" },
+              { label: 'Suspeitos', data: [results.suspects], fill: true, backgroundColor: "#e9c46a" },
+              { label: 'Descartados', data: [results.refuses], fill: true, backgroundColor: "#e76f51" },
+            ]
+          };
 
-          this.setState({ ...this.state, data });
+          this.setState({ ...this.state, data: data, generateChart: true });
           console.log('state', this.state)
         } catch (error) {
           console.error(error);
@@ -103,25 +114,65 @@ class Home extends React.Component {
     },
   ];
 
-  Chart() {
-
-    // const data = this.state.datachart;
-    const data = null;
+  RenderPanels({ data }) {
+    // return (
+    //   <pre>
+    //     {JSON.stringify(data)}
+    //   </pre>
+    // )
 
     return (
       <>
-        {/* <Bar
-          data={data}
-          options={{
-            title: {
-              display: true,
-              text: "Valor do bolsa família distribuído por cidade",
-            },
-          }}
-          width="600px"
-          height="400px"
-          ref={this.chartReference} /> */}
+        <ul className="cards-inline">
+          <li className="card card-light">
+            <div>
+              {
+                data.cases
+              }
+            </div>
+            <div>
+              CASOS
+          </div>
+          </li>
+          <li className="card card-warn">
+            <div>
+              {
+                data.suspects
+              }
+            </div>
+            <div>
+              SUSPEITOS
+          </div>
+          </li>
+          <li className="card card-danger">
+            <div>
+              {
+                data.deaths
+              }
+            </div>
+            <div>
+              MORTES
+          </div>
+          </li>
+          <li className="card card-info">
+            <div>
+              {
+                data.refuses
+              }
+            </div>
+            <div>
+              DESCARTADOS
+          </div>
+          </li>
+        </ul>
       </>
+    )
+  }
+
+  RenderChart({ data }) {
+    console.log('data', data)
+    return (
+      <Bar data={data} />
     )
   }
 
@@ -158,7 +209,14 @@ class Home extends React.Component {
             </div>
             <div className="card">
               <div className="card-content">
-                <Bar data={this.state.data} />
+                {
+                  this.state.generateChart ?
+                    <this.RenderChart data={this.state.data} />
+                    : !this.state.data ?
+                      (<p>Selecione uma opção</p>)
+                      : <this.RenderPanels data={this.state.data} />
+                }
+
               </div>
             </div>
           </div>
@@ -168,73 +226,5 @@ class Home extends React.Component {
     );
   }
 }
-
-// const Home = () => {
-//   const [requestResults, setRequestResults] = useState([]);
-//   const chartReference = React.createRef();
-//   const [dataChart, setDataChart] = useState({});
-//   const [Chart, setChart] = useState(null);
-
-// const doRequest = async (uri) => {
-//   const request = Axios.create();
-//   try {
-//     return (await request.get(uri)).data;
-//   } catch (error) {
-//     throw error;
-//   }
-// };
-
-// const options = [
-//   {
-//     name: "MUNDO",
-//     value: "per_country",
-//     checked: true,
-//     meta: async () => {
-//       const results = await doRequest(
-//         "https://covid19-brazil-api.now.sh/api/report/v1/countries"
-//       );
-//       console.log("per_country", results);
-//       setRequestResults(results);
-//     },
-//   },
-//   {
-//     name: "BRASIL",
-//     value: "brazil",
-//     checked: false,
-//     meta: async () => {
-//       const results = await doRequest(
-//         "https://covid19-brazil-api.now.sh/api/report/v1"
-//       );
-//       console.log("brazil", results);
-//       console.log(typeof results);
-//       setRequestResults(results);
-//       const dataChart = {
-//         labels: results.data.map((x) => `${x.state} ${x.uf}`),
-//         datasets: [
-//           { label: "Mortes", data: results.data.map((x) => x.deaths) },
-//           { label: "Casos", data: results.data.map((x) => x.cases) },
-//           { label: "Suspeitos", data: results.data.map((x) => x.suspects) },
-//           { label: "Descartados", data: results.data.map((x) => x.refuses) },
-//         ],
-//       };
-
-//       setChart(<Bar ref={chartReference} data={dataChart} />);
-//     },
-//   },
-//   {
-//     name: "MINAS GERAIS",
-//     value: "minas_gerais",
-//     checked: false,
-//     meta: async () => {
-//       const results = await doRequest(
-//         "https://covid19-brazil-api.now.sh/api/report/v1/brazil/uf/mg"
-//       );
-//       console.log("minas_gerais", results);
-//       console.log(typeof results);
-//       setRequestResults(results);
-//     },
-//   },
-//   ];
-// };
 
 export default Home;
