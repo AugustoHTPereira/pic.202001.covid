@@ -5,10 +5,8 @@ import { Bar } from "react-chartjs-2";
 class Home extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
-      dataChart: null,
-      ref: React.createRef()
+      data: []
     };
   }
 
@@ -27,11 +25,30 @@ class Home extends React.Component {
       value: "per_country",
       checked: true,
       meta: async () => {
-        // const results = await doRequest(
-        //   "https://covid19-brazil-api.now.sh/api/report/v1/countries"
-        // );
-        // console.log("per_country", results);
-        // setRequestResults(results);
+        try {
+          const results = await this.doRequest(
+            "https://covid19-brazil-api.now.sh/api/report/v1/countries"
+          );
+
+          const data = {
+            labels: results.data.map((x) => `${x.country}`),
+            datasets: [
+              { label: "Mortes", data: results.data.map((x) => x.deaths), backgroundColor: "#e63946", fill: true },
+              { label: "Casos", data: results.data.map((x) => x.cases), backgroundColor: "#a8dadc", fill: true },
+              { label: "Suspeitos", data: results.data.map((x) => x.suspects), backgroundColor: "#e9c46a", fill: true },
+              {
+                label: "Descartados",
+                data: results.data.map((x) => x.refuses), backgroundColor: "#e76f51", fill: true
+              },
+            ],
+          };
+
+          this.setState({ ...this.state, data });
+
+          console.log('state', this.state)
+        } catch (error) {
+          console.error(error);
+        }
       },
     },
     {
@@ -43,25 +60,23 @@ class Home extends React.Component {
           const results = await this.doRequest(
             "https://covid19-brazil-api.now.sh/api/report/v1"
           );
-          console.log("brazil", results);
-          console.log(typeof results);
-          // setRequestResults(results);
-          const dataChart = {
+
+          const data = {
             labels: results.data.map((x) => `${x.state} ${x.uf}`),
             datasets: [
-              { label: "Mortes", data: results.data.map((x) => x.deaths) },
-              { label: "Casos", data: results.data.map((x) => x.cases) },
-              { label: "Suspeitos", data: results.data.map((x) => x.suspects) },
+              { label: "Mortes", data: results.data.map((x) => x.deaths), backgroundColor: "#e63946", fill: true },
+              { label: "Casos", data: results.data.map((x) => x.cases), backgroundColor: "#a8dadc", fill: true },
+              { label: "Suspeitos", data: results.data.map((x) => x.suspects), backgroundColor: "#e9c46a", fill: true },
               {
                 label: "Descartados",
-                data: results.data.map((x) => x.refuses),
+                data: results.data.map((x) => x.refuses), backgroundColor: "#e76f51", fill: true
               },
             ],
           };
 
-          console.log("datachart", dataChart);
+          this.setState({ ...this.state, data })
 
-          this.setState({...this.state, datachart: dataChart})
+          console.log('state', this.state);
         } catch (error) {
           console.error(error.message);
         }
@@ -72,32 +87,42 @@ class Home extends React.Component {
       value: "minas_gerais",
       checked: false,
       meta: async () => {
-        // const results = await doRequest(
-        //   "https://covid19-brazil-api.now.sh/api/report/v1/brazil/uf/mg"
-        // );
-        // console.log("minas_gerais", results);
-        // console.log(typeof results);
-        // setRequestResults(results);
+        try {
+          const results = await this.doRequest(
+            "https://covid19-brazil-api.now.sh/api/report/v1/brazil/uf/mg"
+          );
+
+          const data = results;
+
+          this.setState({ ...this.state, data });
+          console.log('state', this.state)
+        } catch (error) {
+          console.error(error);
+        }
       },
     },
   ];
 
   Chart() {
-    // return (
-    //   <Bar
-    //     options={{
-    //       title: {
-    //         display: true,
-    //         text: "COVID",
-    //       },
-    //     }}
-    //     width="600px"
-    //     height="400px"
-    //     // ref={this.state.ref}
-    //     data={this.state.dataChart}
-    //   />
-    // );
-    console.log(this)
+
+    // const data = this.state.datachart;
+    const data = null;
+
+    return (
+      <>
+        {/* <Bar
+          data={data}
+          options={{
+            title: {
+              display: true,
+              text: "Valor do bolsa família distribuído por cidade",
+            },
+          }}
+          width="600px"
+          height="400px"
+          ref={this.chartReference} /> */}
+      </>
+    )
   }
 
   render() {
@@ -133,7 +158,7 @@ class Home extends React.Component {
             </div>
             <div className="card">
               <div className="card-content">
-                <this.Chart />
+                <Bar data={this.state.data} />
               </div>
             </div>
           </div>
