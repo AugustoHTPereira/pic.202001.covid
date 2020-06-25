@@ -10,15 +10,7 @@ body {
   background-color: #434343;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p,
-label,
-span {
+h1, h2, h3, h4, h5, h6, p, label, span {
   color: #f9f9f9;
 }
 
@@ -102,13 +94,102 @@ ul.flex li {
   margin: -3px -5px;
 }
 
-.btn-check input:checked + label {
+.card-light, .card-danger, .card-warn, .card-info {
+  /* width: max-content; */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 140px;
+  transform: enter-chart ease-in-out;
+}
+
+.card-light>div, .card-danger>div, .card-warn>div, .card-info>div {
+  margin: 0 25px;
+}
+
+.card-light {
+  background-color: #44a5ff;
+  padding: 15px 0;
+  color: #f9f9f9;
+  box-shadow: 0 5px 5px #3b99f11e;
+}
+
+.card-light div:first-child {
+  font-size: 26px;
+  border-bottom: 1px solid #3b99f1;
+  margin-bottom: 5px;
+}
+
+.card-light div:last-child {
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.card-danger {
+  background-color: #e63946;
+  color: #f9f9f9;
+  box-shadow: 0 5px 5px #e639461e;
+}
+
+.card-danger div:first-child {
+  font-size: 26px;
+  border-bottom: 1px solid #c53642;
+  margin-bottom: 5px;
+}
+
+.card-danger div:last-child {
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.card-warn {
+  background-color: #e9c46a;
+  color: #f9f9f9;
+  box-shadow: 0 5px 5px #e9c46a1e;
+}
+
+.card-warn div:first-child {
+  font-size: 26px;
+  border-bottom: 1px solid #c5a75b;
+  margin-bottom: 5px;
+}
+
+.card-warn div:last-child {
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.card-info {
+  background-color: #e76f51;
+  color: #f9f9f9;
+  box-shadow: 0 5px 5px #e76f511e;
+}
+
+.card-info div:first-child {
+  font-size: 26px;
+  border-bottom: 1px solid #be5d44;
+  margin-bottom: 5px;
+}
+
+.card-info div:last-child {
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.cards-inline {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-gap: 15px;
+}
+
+.btn-check input:checked+label {
   color: #f9f9f9;
   background-color: #44a5ff;
 }
 
 .ds-cm {
-  position: absolute;
+  position: fixed;
   bottom: 0;
   right: 0;
   left: 0;
@@ -122,11 +203,9 @@ ul.flex li {
   .page-content .content {
     margin: 0 30px;
   }
-
   .page-content .content .header {
     margin-top: 15px;
   }
-
   .page-content .content .grid-content {
     display: grid;
     grid-template-columns: 1fr;
