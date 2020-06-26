@@ -23,7 +23,7 @@ h1, h2, h3, h4, h5, h6, p, label, span {
 }
 
 .page-content .content .header {
-  margin-top: 63px;
+  margin-top: 45px;
   margin-bottom: 35px;
 }
 
@@ -43,6 +43,7 @@ h1, h2, h3, h4, h5, h6, p, label, span {
   border-radius: 15px;
   background-color: #474747;
   width: 100%;
+  height: max-content;
 }
 
 .card .card-content {
@@ -75,6 +76,24 @@ ul {
   padding: 0;
 }
 
+.covid-image img {
+  width: 220px;
+  border-radius: 50%;
+}
+
+.covid-image {
+  border-radius: 50%;
+  overflow: hidden;
+  width: 140px;
+  height: 140px;
+  background-color: #000;
+  object-fit: cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 85px auto;
+}
+
 ul li {
   list-style-type: none;
   padding: 0;
@@ -82,8 +101,9 @@ ul li {
 }
 
 ul.flex {
-  display: flex;
+  display: block;
   flex-wrap: wrap;
+
 }
 
 ul.flex li {
@@ -209,5 +229,9 @@ ul.flex li {
   .page-content .content .grid-content {
     display: grid;
     grid-template-columns: 1fr;
+  }
+
+  .covid-image {
+    display: none;
   }
 }
